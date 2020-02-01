@@ -49,20 +49,25 @@ int main(int argc, char *argv[])
 /*send mesg and recv mesg*/
 static int send_recv_mesg(int sockfd)
 {
-    int ret;
-    char send_mesg[128] = "I am sending mesg to you";
-    char recv_mesg[128] = "";
-
-    ret = write(sockfd,send_mesg,strlen(send_mesg));
-    if(-1 == ret)
-    	return -1;
-    printf("The sent mesg is %s\n",send_mesg);
-
-    ret = read(sockfd,recv_mesg,128);
-    if(-1 == ret)
-    	return -1;
-    printf("The recv mesg is %s\n",recv_mesg);
-
+    FILE *img = NULL;
+    unsigned int ret = 0;
+    char img_buff[1024*64] = {0};
+    char jpg_name[] = "girl.jpg";
+    img = fopen(jpg_name,"rb");
+    if (NULL == img)
+    {
+	printf("fopen girl.jpg failed\n");
+	return -1;
+    }
+    printf("Start to send to server\n");
+    //fread
+    while((ret = fread(img_buff,1,1024*64,img)) > 0)
+    {
+   	printf("The ret is %d\n",ret); 
+    	write(sockfd,img_buff,strlen(img_buff));
+    }
+    //fclose
+    fclose(img);
     return 0;
 }
 
