@@ -6,17 +6,28 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-
+#define BUFF_SIZE 1024*64
 pthread_mutex_t mutex;//pthread lock 
-static void recv_image_from_client(int connfd)
+static int recv_image_from_client(int connfd)
 {
+    FILE *img = NULL;
     int len = 0;
-    char buff[480*320] = "";
+    char buff[BUFF_SIZE] = {0};
+    img = fopen("girl_cp.jpg","wb");
+    if (NULL == img)
+    {
+    	printf("Error in fopen\n");
+    	return -1;
+    }
+
     while((len = recv(connfd,buff,sizeof(buff),0)) > 0)
     {
-
+    	printf("The len is %d\n",len);
+        fwrite(buff,len,1,img);		
     }
+    fclose(img);
     close(connfd);
+    return 0;
 }
 
 static void *client_process(void *arg)
