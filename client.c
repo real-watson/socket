@@ -7,7 +7,6 @@
 #include <arpa/inet.h>
 
 static int send_recv_mesg(int sockfd);
-
 int main(int argc, char *argv[])
 {
     int sockfd = 0; 
@@ -64,7 +63,8 @@ static int send_recv_mesg(int sockfd)
     while((ret = fread(img_buff,1,1024*64,img)) > 0)
     {
    	printf("The ret is %d\n",ret); 
-    	write(sockfd,img_buff,strlen(img_buff));
+    	ret = write(sockfd,img_buff,ret);
+	printf("The ret is %d\n",ret);
     }
     //fclose
     fclose(img);
