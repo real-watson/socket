@@ -6,28 +6,26 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#define BUFF_SIZE 1024*64
+#define BUFF_SIZE 1024
 #define VIDEO_SIZE 1024*1024*32
-//#define IMAGE_FLAG 
-#define VIDEO_FLAG 
 unsigned int img_index = 0;
 
 pthread_mutex_t mutex;//pthread lock 
 static int recv_video_from_client(int connfd)
 {
     FILE *video = NULL;
-    char buff[VIDEO_SIZE] = {0};
-    const char *path = "img/no1.video";
+    char buff[BUFF_SIZE] = {0};
     int len = 0;
 
-    video = fopen(path,"wb");
+    printf("start to video\n");
+    video = fopen("video.mp4","wb");
     if (NULL == video)
     {
 	printf("error fopen\n");
 	return -1;
     }
     //read video from server
-    while((len = recv(connfd,buff,sizeof(buff),0)) > 0)
+    while((len = recv(connfd,buff,strlen(buff),0)) > 0)
     {
     	printf("The len is %d\n",len);
         fwrite(buff,len,1,video);		
@@ -69,13 +67,8 @@ static void *client_process(void *arg)
     /*Unlock the pthread.*/
     pthread_mutex_unlock(&mutex);
     printf("receive image from client: ip:port:mesg:flag:id\n");
-#ifdef IMAGE_FLAG
-    recv_image_from_client(connfd);
-#endif
-
-#ifdef VIDEO_FLAG
+    //recv_image_from_client(connfd);
     recv_video_from_client(connfd);
-#endif
 
     close(connfd); 
     return NULL;
