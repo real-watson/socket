@@ -5,7 +5,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
+#define SIZE 1024*1024*32
 static int send_recv_mesg(int sockfd);
 int main(int argc, char *argv[])
 {
@@ -50,7 +50,7 @@ static int send_recv_mesg(int sockfd)
 {
     FILE *img = NULL;
     unsigned int ret = 0;
-    char img_buff[1024*64] = {0};
+    char img_buff[SIZE] = {0};
     char jpg_name[] = "girl.jpg";
     img = fopen(jpg_name,"rb");
     if (NULL == img)
@@ -60,7 +60,7 @@ static int send_recv_mesg(int sockfd)
     }
     printf("Start to send to server\n");
     //fread
-    while((ret = fread(img_buff,1,1024*64,img)) > 0)
+    while((ret = fread(img_buff,1,SIZE,img)) > 0)
     {
    	printf("The ret is %d\n",ret); 
     	ret = write(sockfd,img_buff,ret);
