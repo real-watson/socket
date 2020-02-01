@@ -6,7 +6,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#define BUFF_SIZE 1024
+#define BUFF_SIZE 1024*12
 #define VIDEO_SIZE 1024*1024*32
 unsigned int img_index = 0;
 
@@ -25,11 +25,12 @@ static int recv_video_from_client(int connfd)
 	return -1;
     }
     //read video from server
-    while((len = recv(connfd,buff,strlen(buff),0)) > 0)
+    while((len = recv(connfd,buff,BUFF_SIZE,0)) > 0)
     {
     	printf("The len is %d\n",len);
         fwrite(buff,len,1,video);		
     }
+    printf("The len is %d\n",len);
     fclose(video);
     close(connfd);
     return 0;
