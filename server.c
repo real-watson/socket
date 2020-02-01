@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 #define BUFF_SIZE 1024*64
+#define IMAGE_FLAG 
 unsigned int img_index = 0;
 
 pthread_mutex_t mutex;//pthread lock 
@@ -42,7 +43,11 @@ static void *client_process(void *arg)
     /*Unlock the pthread.*/
     pthread_mutex_unlock(&mutex);
     printf("receive image from client: ip:port:mesg:flag:id\n");
+#ifdef IMAGE_FLAG
     recv_image_from_client(connfd);
+#else
+    //recv_video_from_client(connfd);
+#endif
     close(connfd); 
     return NULL;
 }
