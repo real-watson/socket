@@ -7,13 +7,19 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 #define BUFF_SIZE 1024*64
+unsigned int img_index = 0;
+
 pthread_mutex_t mutex;//pthread lock 
 static int recv_image_from_client(int connfd)
 {
+    img_index++;
     FILE *img = NULL;
     int len = 0;
     char buff[BUFF_SIZE] = {0};
-    img = fopen("girl_cp.jpg","wb");
+    char index_jpg[12] = "";
+
+    sprintf(index_jpg,"img/no_%d.jpg",img_index);
+    img = fopen(index_jpg,"wb");
     if (NULL == img)
     {
     	printf("Error in fopen\n");
