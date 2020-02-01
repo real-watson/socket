@@ -25,7 +25,7 @@ static int recv_image_from_client(int connfd)
     	printf("Error in fopen\n");
     	return -1;
     }
-
+    //read from client and write to img
     while((len = recv(connfd,buff,sizeof(buff),0)) > 0)
     {
     	printf("The len is %d\n",len);
