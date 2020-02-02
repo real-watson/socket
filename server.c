@@ -21,21 +21,17 @@ static int init_lock(FILE *file, int type)
     lock.l_whence = SEEK_SET;
     lock.l_start = 0;
     lock.l_len = 0;
-    //lock.l_type = type;
+    lock.l_type = type;
     lock.l_pid = -1;
 
-    //to fd
-    fd = fileno(file);
-
-    //get lock status
-    fcntl(fd,F_GETLK,&lock);
-    if (lock.l_type == F_RDLCK || lock.l_type == F_WRLCK)
+    //FILE *file to fd
+    if (fd=fileno(file) == -1)
     	return -1;
-    
+
     //set lock
-    lock.l_type = type;
     if ((fcntl(fd,F_SETLKW,&lock)) < 0)
     	return -1;
+    return 0;
 }
 
 static int recv_video_from_client(unsigned int connfd)
@@ -54,6 +50,10 @@ static int recv_video_from_client(unsigned int connfd)
     while((len = recv(connfd,buff,BUFF_SIZE_12K,0)) > 0)
         fwrite(buff,len,1,video);		
     
+    //unlock file
+    if (-1 == init_lock(video,F_UNLCK))
+    	return -1;
+
     if (len < 0)
     	return -1;
 
