@@ -6,31 +6,29 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#define BUFF_SIZE 1024*12
+#define BUFF_SIZE_12K 1024*12
 #define VIDEO_SIZE 1024*1024*32
+#define PATH "video.mp4"
 unsigned int img_index = 0;
 
 pthread_mutex_t mutex;//pthread lock 
-static int recv_video_from_client(int connfd)
+static int recv_video_from_client(unsigned int connfd)
 {
     FILE *video = NULL;
-    char buff[BUFF_SIZE] = {0};
-    int len = 0;
+    unsigned char buff[BUFF_SIZE_12K] = {0};
+    unsigned int len = 0;
 
-    printf("start to video\n");
-    video = fopen("video.mp4","wb");
+    video = fopen(PATH,"wb");
     if (NULL == video)
-    {
-	printf("error fopen\n");
 	return -1;
-    }
+	
     //read video from server
-    while((len = recv(connfd,buff,BUFF_SIZE,0)) > 0)
-    {
-    	printf("The len is %d\n",len);
+    while((len = recv(connfd,buff,BUFF_SIZE_12K,0)) > 0)
         fwrite(buff,len,1,video);		
-    }
-    printf("The len is %d\n",len);
+    
+    if (len < 0)
+    	return -1;
+
     fclose(video);
     close(connfd);
     return 0;
@@ -41,7 +39,7 @@ static int recv_image_from_client(int connfd)
     img_index++;
     FILE *img = NULL;
     int len = 0;
-    char buff[BUFF_SIZE] = {0};
+    char buff[BUFF_SIZE_12K] = {0};
     char index_jpg[12] = "";
 
     sprintf(index_jpg,"img/no_%d.jpg",img_index);
