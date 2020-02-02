@@ -7,7 +7,6 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 #define BUFF_SIZE_12K 1024*12
-#define VIDEO_SIZE 1024*1024*32
 #define PATH "video.mp4"
 unsigned int img_index = 0;
 
