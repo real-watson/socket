@@ -7,11 +7,37 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 #include <fcntl.h>
+#include <mysql.h>
 #define BUFF_SIZE_12K 1024*12
 #define PATH "video.mp4"
 unsigned int img_index = 0;
+unsigned int id_index = 200;
 
 pthread_mutex_t mutex;//pthread lock 
+
+//init database
+static int init_mysql_database(unsigned int id, unsigned char *ipaddr, unsigned int port, char *mesg)
+{
+    MYSQL mysql_conn;
+    mysql_init(&mysql_conn);
+    char database[] = "ipaddr";
+    char cmd[256] = "";
+   
+    if (ipaddr == NULL || mesg == NULL)
+    	return -1;
+
+    //connected to mysql 
+    if (!mysql_real_connect(&mysql_conn, "localhost", "root", NULL, database, 0, NULL, 0)) 
+        return -1;	
+
+    //insert data 
+    sprintf(cmd,"INSERT INTO address(id, addr,port,mesg) VALUES(%d,'%s',%d,'%s')",id,ipaddr,port,mesg);
+    if(mysql_query(&mysql_conn,cmd) != 0)
+	return -1;
+
+    mysql_close(&mysql_conn);
+    return 0; 
+}
 
 static int init_lock(FILE *file, int type)
 {
@@ -160,6 +186,11 @@ int main(int argc, char **argv)
 	//set lock for each accept-> connfd_pthread
 	pthread_mutex_lock(&mutex);
 	connfd = accept(sockfd, (struct sockaddr*)&client_addr, &cliaddr_len);
+	id_index++;
+
+	//store the id,address,port,mesg  in database(mysql)
+        init_mysql_database(id_index,inet_ntoa(client_addr.sin_addr),client_addr.sin_port,"connected");
+
 	if(connfd < 0)
 	{
 	    perror("accept this time");
