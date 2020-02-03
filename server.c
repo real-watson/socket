@@ -188,14 +188,13 @@ int main(int argc, char **argv)
 	connfd = accept(sockfd, (struct sockaddr*)&client_addr, &cliaddr_len);
 	id_index++;
 
-	//store the id,address,port,mesg  in database(mysql)
-        init_mysql_database(id_index,inet_ntoa(client_addr.sin_addr),client_addr.sin_port,"connected");
-
 	if(connfd < 0)
 	{
 	    perror("accept this time");
 	    continue;
 	}
+	//store the id,address,port,mesg  in database(mysql)
+        init_mysql_database(id_index,inet_ntoa(client_addr.sin_addr),client_addr.sin_port,"connected");
 
 	inet_ntop(AF_INET, &client_addr.sin_addr, cli_ip, INET_ADDRSTRLEN);
 	printf("client ip=%s,port=%d\n", cli_ip,ntohs(client_addr.sin_port));
