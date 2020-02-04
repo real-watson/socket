@@ -21,7 +21,7 @@ static int init_mysql_database(unsigned int id, unsigned char *ipaddr, unsigned 
     MYSQL mysql_conn;
     mysql_init(&mysql_conn);
     char database[] = "ipaddr";
-    char cmd[256] = "";
+    char query[256] = "";
    
     if (ipaddr == NULL || mesg == NULL)
     	return -1;
@@ -31,8 +31,8 @@ static int init_mysql_database(unsigned int id, unsigned char *ipaddr, unsigned 
         return -1;	
 
     //insert data 
-    sprintf(cmd,"INSERT INTO address(id, addr,port,mesg) VALUES(%d,'%s',%d,'%s')",id,ipaddr,port,mesg);
-    if(mysql_query(&mysql_conn,cmd) != 0)
+    sprintf(query,"INSERT INTO address(id, addr,port,mesg) VALUES(%d,'%s',%d,'%s')",id,ipaddr,port,mesg);
+    if(mysql_query(&mysql_conn,query) != 0)
 	return -1;
 
     mysql_close(&mysql_conn);
