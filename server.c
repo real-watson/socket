@@ -50,6 +50,9 @@ static int init_lock(FILE *file, int type)
     lock.l_type = type;
     lock.l_pid = -1;
 
+    if (file == NULL)
+    	return -1;
+
     //FILE *file to fd
     if (fd=fileno(file) == -1)
     	return -1;
