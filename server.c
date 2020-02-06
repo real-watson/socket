@@ -10,6 +10,8 @@
 #include <mysql.h>
 #define BUFF_SIZE_12K 1024*12
 #define PATH "video.mp4"
+//jpg 
+//#define PATH "girl.jpg"
 unsigned int img_index = 0;
 unsigned int id_index = 200;
 
