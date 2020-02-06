@@ -52,7 +52,7 @@ static int send_recv_mesg(int sockfd)
     unsigned int ret = 0;
     char img_buff[SIZE] = {0};
     char jpg_name[] = "helloworld.mp4";
-    img = fopen(jpg_name,"rb");
+    img = fopen(jpg_name,"rb+");
     if (NULL == img)
     {
 	printf("fopen girl.jpg failed\n");
