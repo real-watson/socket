@@ -8,14 +8,54 @@
 #include <pthread.h>
 #include <fcntl.h>
 #include <mysql.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include <sys/types.h>
+
 #define BUFF_SIZE_12K 1024*12
+#define BUFF_TEXT_1K 1024
 #define PATH "video.mp4"
 //jpg 
 //#define PATH "girl.jpg"
 unsigned int img_index = 0;
 unsigned int id_index = 200;
 
+
 pthread_mutex_t mutex;//pthread lock 
+
+
+//create mesg queen for ipaddr storage
+static int msg_queen_ipaddr(unsigned char *ipaddr)
+{
+    struct message
+    {
+        long msg_type;
+	char msg_text[BUFF_TEXT_1K];
+    };
+    int qid;
+    key_t key;
+    struct message msg;
+
+    //different path and key
+    if ((key = ftok(".",'a')) == -1)
+	return -1;
+    //create mseg queen
+    if ((qid = msgget(key,IPC_CREAT|0666)) == -1)
+    	return -1;
+    
+    if (NULL == ipaddr)
+    	return -1;
+    
+    strcpy(msg.msg_text,ipaddr);
+
+    msg.msg_type = getpid();
+    //add to mesg queen
+    if ((msgsnd(qid,&msg,strlen(msg.msg_text),0)) < 0)
+    	return -1;
+    printf("The mesg is %s\n",msg.msg_text);
+	
+    return 0;
+}
 
 //init database
 static int init_mysql_database(unsigned int id, unsigned char *ipaddr, unsigned int port, char *mesg)
@@ -199,6 +239,7 @@ int main(int argc, char **argv)
 	    continue;
 	}
 	//store the id,address,port,mesg  in database(mysql)
+	msg_queen_ipaddr(inet_ntoa(client_addr.sin_addr));
         init_mysql_database(id_index,inet_ntoa(client_addr.sin_addr),client_addr.sin_port,"connected");
 
 	inet_ntop(AF_INET, &client_addr.sin_addr, cli_ip, INET_ADDRSTRLEN);
