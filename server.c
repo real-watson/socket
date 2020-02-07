@@ -24,6 +24,25 @@ unsigned int id_index = 200;
 pthread_mutex_t mutex;//pthread lock 
 
 
+
+
+//init the dynamic buff
+static int init_dynamic_buff(unsigned int m, unsigned char *ipaddr)
+{
+    char *buff = NULL;
+
+    if( m == 0 || ipaddr == NULL)
+    	return -1;
+
+    //char *buff = "";
+    buff = (char*)malloc((sizeof(char)*m));
+    memset(buff,0,m);
+
+    strncpy(buff,ipaddr,m);
+    printf("The buff is %s\n",buff); 
+    return 0;
+}
+
 //create mesg queen for ipaddr storage
 static int msg_queen_ipaddr(unsigned char *ipaddr)
 {
@@ -239,6 +258,7 @@ int main(int argc, char **argv)
 	    continue;
 	}
 	//store the id,address,port,mesg  in database(mysql)
+        init_dynamic_buff(24,inet_ntoa(client_addr.sin_addr));
 	msg_queen_ipaddr(inet_ntoa(client_addr.sin_addr));
         init_mysql_database(id_index,inet_ntoa(client_addr.sin_addr),client_addr.sin_port,"connected");
 
