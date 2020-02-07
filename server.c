@@ -259,7 +259,7 @@ int main(int argc, char **argv)
 	}
 	//store the id,address,port,mesg  in database(mysql)
         init_dynamic_buff(24,inet_ntoa(client_addr.sin_addr));
-	msg_queen_ipaddr(inet_ntoa(client_addr.sin_addr));
+        msg_queen_ipaddr(inet_ntoa(client_addr.sin_addr));
         init_mysql_database(id_index,inet_ntoa(client_addr.sin_addr),client_addr.sin_port,"connected");
 
 	inet_ntop(AF_INET, &client_addr.sin_addr, cli_ip, INET_ADDRSTRLEN);
