@@ -23,7 +23,26 @@ unsigned int id_index = 200;
 
 pthread_mutex_t mutex;//pthread lock 
 
+//init the dynamic memeory
+static void get_memeory(char **ptr,int m)
+{
+    *ptr = (char*)malloc(sizeof(char)*m);
+}
 
+static int set_memeory(unsigned char *ipaddr,int m)
+{
+    char *string = NULL; 
+
+    if (ipaddr == NULL)
+    	return -1;
+
+    get_memeory(&string,m);
+    strcpy(string,ipaddr);
+    printf("The string is %s,while the length of it is %d\n",string,(int)strlen(string));
+    free (string);
+
+    return 0;
+}
 
 
 //init the dynamic buff
