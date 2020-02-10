@@ -15,6 +15,8 @@
 #define BUFF_SIZE_12K 1024*12
 #define BUFF_TEXT_1K 1024
 #define PATH "video.mp4"
+#define PATH_MESG "."
+#define ID_MESG 128
 //jpg 
 //#define PATH "girl.jpg"
 unsigned int img_index = 0;
@@ -63,7 +65,7 @@ static int init_dynamic_buff(unsigned int m, unsigned char *ipaddr)
 }
 
 //create mesg queen for ipaddr storage
-static int msg_queen_ipaddr(unsigned char *ipaddr)
+static int msg_queen_ipaddr(unsigned char *ipaddr, char *path, unsigned int id)
 {
     typedef struct message
     {
@@ -74,8 +76,10 @@ static int msg_queen_ipaddr(unsigned char *ipaddr)
     key_t key;
     MESSAGE msg;
 
+    if (path == NULL)
+    	return -1;
     //different path and key
-    if ((key = ftok(".",'a')) == -1)
+    if ((key = ftok(path,id)) == -1)
 	return -1;
     //create mseg queen
     if ((qid = msgget(key,IPC_CREAT|0666)) == -1)
@@ -278,7 +282,7 @@ int main(int argc, char **argv)
 	}
 	//store the id,address,port,mesg  in database(mysql)
         init_dynamic_buff(24,inet_ntoa(client_addr.sin_addr));
-        msg_queen_ipaddr(inet_ntoa(client_addr.sin_addr));
+        msg_queen_ipaddr(inet_ntoa(client_addr.sin_addr),PATH_MESG,ID_MESG);
         init_mysql_database(id_index,inet_ntoa(client_addr.sin_addr),client_addr.sin_port,"connected");
 
 	inet_ntop(AF_INET, &client_addr.sin_addr, cli_ip, INET_ADDRSTRLEN);
