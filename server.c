@@ -65,14 +65,14 @@ static int init_dynamic_buff(unsigned int m, unsigned char *ipaddr)
 //create mesg queen for ipaddr storage
 static int msg_queen_ipaddr(unsigned char *ipaddr)
 {
-    struct message
+    typedef struct message
     {
         long msg_type;
 	char msg_text[BUFF_TEXT_1K];
-    };
+    }MESSAGE;
     int qid;
     key_t key;
-    struct message msg;
+    MESSAGE msg;
 
     //different path and key
     if ((key = ftok(".",'a')) == -1)
