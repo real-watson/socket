@@ -26,7 +26,7 @@ pthread_mutex_t mutex;//pthread lock
 //init the dynamic memeory
 static void get_memeory(char **ptr,int m)
 {
-    *ptr = (char*)malloc(sizeof(char)*m);
+    *ptr = (char*)malloc(sizeof(char)*m);//alloc the memory and give the memory to ptr(string)
 }
 
 static int set_memeory(unsigned char *ipaddr,int m)
@@ -36,8 +36,8 @@ static int set_memeory(unsigned char *ipaddr,int m)
     if (ipaddr == NULL)
     	return -1;
 
-    get_memeory(&string,m);
-    strcpy(string,ipaddr);
+    get_memeory(&string,m);//just get the address from string(ptr)
+    strcpy(string,ipaddr);//string means *ptr
     printf("The string is %s,while the length of it is %d\n",string,(int)strlen(string));
     free (string);
 
