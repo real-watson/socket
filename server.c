@@ -225,6 +225,9 @@ static int init_socket_server()
 {
     int err_log = 0;
     int sockfd;
+    int sock_type = -1;
+    socklen_t len = -1;
+    
     unsigned short port = 23456; 
     struct sockaddr_in my_addr; 
 
@@ -237,6 +240,15 @@ static int init_socket_server()
 	perror("socket error");
 	return -1;
     }
+    //check the type of socket
+    len = sizeof(sock_type);
+    err_log = getsockopt(sockfd,SOL_SOCKET,SO_TYPE,&sock_type,&len);
+    if (err_log == -1)
+    {
+	close(sockfd);
+	return -1;
+    }
+    printf("The sock type is %d\n",sock_type);
     /*Init the addr struct.*/
     bzero(&my_addr, sizeof(my_addr)); 
     my_addr.sin_family = AF_INET;
