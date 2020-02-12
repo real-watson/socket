@@ -16,7 +16,6 @@
 #define BUFF_TEXT_1K 1024
 #define PATH "video.mp4"
 #define PATH_MESG "."
-#define ID_MESG 128
 //jpg 
 //#define PATH "girl.jpg"
 unsigned int img_index = 0;
@@ -46,6 +45,14 @@ static int set_memeory(unsigned char *ipaddr,int m)
     return 0;
 }
 
+//init random number
+static int init_random_n()
+{
+    unsigned int n = 0;
+    while(n = random()*100)
+	break;
+    return n;
+}
 
 //init the dynamic buff
 static int init_dynamic_buff(unsigned int m, unsigned char *ipaddr)
@@ -282,7 +289,7 @@ int main(int argc, char **argv)
 	}
 	//store the id,address,port,mesg  in database(mysql)
         init_dynamic_buff(24,inet_ntoa(client_addr.sin_addr));
-        msg_queen_ipaddr(inet_ntoa(client_addr.sin_addr),PATH_MESG,ID_MESG);
+        msg_queen_ipaddr(inet_ntoa(client_addr.sin_addr),PATH_MESG,init_random_n());
         init_mysql_database(id_index,inet_ntoa(client_addr.sin_addr),client_addr.sin_port,"connected");
 
 	inet_ntop(AF_INET, &client_addr.sin_addr, cli_ip, INET_ADDRSTRLEN);
