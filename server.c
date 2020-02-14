@@ -162,13 +162,13 @@ static int recv_video_from_client(unsigned int connfd)
 
     video = fopen(PATH,"wb");
     if (NULL == video)
-	return -1;
+		return -1;
     //lock file avoid others writting file
     if (-1 == init_lock(video,F_WRLCK))
     	return -1;
     //read video from server
     while((len = recv(connfd,buff,BUFF_SIZE_12K,0)) > 0)
-        fwrite(buff,len,1,video);		
+        fwrite(buff,len,sizeof(char),video);		
     
     //unlock file
     if (-1 == init_lock(video,F_UNLCK))
@@ -201,7 +201,7 @@ static int recv_image_from_client(int connfd)
     while((len = recv(connfd,buff,sizeof(buff),0)) > 0)
     {
     	printf("The len is %d\n",len);
-        fwrite(buff,len,1,img);		
+        fwrite(buff,len,sizeof(char),img);		
     }
     fclose(img);
     close(connfd);
