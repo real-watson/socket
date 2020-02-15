@@ -51,7 +51,7 @@ static int send_recv_mesg(int sockfd)
     FILE *img = NULL;
     unsigned int ret = 0;
     char img_buff[SIZE] = {0};
-    char jpg_name[] = "helloworld.mp4";
+    char jpg_name[] = "helloworld";
     img = fopen(jpg_name,"rb+");
     if (NULL == img)
     {

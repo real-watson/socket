@@ -24,6 +24,49 @@ unsigned int id_index = 200;
 
 pthread_mutex_t mutex;//pthread lock 
 
+
+typedef struct ip
+{
+	char ipaddr[32];
+	unsigned int port;
+	struct ip *next;
+}LINKS;
+
+
+/*print all links*/
+static void print_links(LINKS *head)
+{
+	LINKS *move = NULL;
+	move = head;
+	//point to head
+	while(move != NULL)//check the first link whether is null
+	{
+		printf("The ipaddr: %s and the port is %d\n",move->ipaddr,move->port);
+		move = move->next;//next link
+	}
+}
+
+/*add links for restoring ipaddr and port*/
+static void create_links(LINKS **head, LINKS *input)
+{
+	LINKS *move = *head;
+	if (*head == NULL)//first link(head)
+	{
+		printf("hellow\n");
+		*head = input;
+		input->next = NULL;
+	}
+	else//after first link
+	{
+		if(move->next != NULL)
+		{
+			move = move->next;
+		}
+		move->next = input;
+		input->next = NULL;//the end of link
+	}
+}
+
 //init the dynamic memeory
 static void get_memeory(char **ptr,int m)
 {
@@ -283,35 +326,44 @@ int main(int argc, char **argv)
     pthread_mutex_init(&mutex, NULL); 
 
     sockfd = init_socket_server();
+	//init the links
+	LINKS *head = NULL;
+	LINKS *input = NULL;
 
     while(1)
     {
-	char cli_ip[INET_ADDRSTRLEN] = "";
- 	struct sockaddr_in client_addr; 
-	socklen_t cliaddr_len = sizeof(client_addr); 
-	//set lock for each accept-> connfd_pthread
-	pthread_mutex_lock(&mutex);
-	connfd = accept(sockfd, (struct sockaddr*)&client_addr, &cliaddr_len);
-	id_index++;
+		char cli_ip[INET_ADDRSTRLEN] = "";
+		struct sockaddr_in client_addr; 
+		socklen_t cliaddr_len = sizeof(client_addr); 
+		//set lock for each accept-> connfd_pthread
+		pthread_mutex_lock(&mutex);
+		connfd = accept(sockfd, (struct sockaddr*)&client_addr, &cliaddr_len);
+		id_index++;
+	
+		//init link
+		input = (LINKS *)malloc(sizeof(LINKS));
+		strcpy(input->ipaddr,inet_ntoa(client_addr.sin_addr));
+		input->port = client_addr.sin_port;
+		create_links(&head,input);
+		print_links(head);
+		if(connfd < 0)
+		{
+			perror("accept this time");
+			continue;
+		}
+		//store the id,address,port,mesg  in database(mysql)
+		init_dynamic_buff(24,inet_ntoa(client_addr.sin_addr));
+		msg_queen_ipaddr(inet_ntoa(client_addr.sin_addr),PATH_MESG,init_random_n());
+		init_mysql_database(id_index,inet_ntoa(client_addr.sin_addr),client_addr.sin_port,"connected");
 
-	if(connfd < 0)
-	{
-	    perror("accept this time");
-	    continue;
-	}
-	//store the id,address,port,mesg  in database(mysql)
-        init_dynamic_buff(24,inet_ntoa(client_addr.sin_addr));
-        msg_queen_ipaddr(inet_ntoa(client_addr.sin_addr),PATH_MESG,init_random_n());
-        init_mysql_database(id_index,inet_ntoa(client_addr.sin_addr),client_addr.sin_port,"connected");
-
-	inet_ntop(AF_INET, &client_addr.sin_addr, cli_ip, INET_ADDRSTRLEN);
-	printf("client ip=%s,port=%d\n", cli_ip,ntohs(client_addr.sin_port));
-	//cope with each clients from 
-	if(connfd > 0)
-	{
-	    pthread_create(&thread_id, NULL, (void *)client_process, (void *)&connfd);
-	    pthread_detach(thread_id); 
-	}
+		inet_ntop(AF_INET, &client_addr.sin_addr, cli_ip, INET_ADDRSTRLEN);
+		printf("client ip=%s,port=%d\n", cli_ip,ntohs(client_addr.sin_port));
+		//cope with each clients from 
+		if(connfd > 0)
+		{
+			pthread_create(&thread_id, NULL, (void *)client_process, (void *)&connfd);
+			pthread_detach(thread_id); 
+		}
     }
 
     close(sockfd);
