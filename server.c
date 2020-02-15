@@ -39,10 +39,17 @@ static void print_links(LINKS *head)
 	LINKS *move = NULL;
 	move = head;
 	//point to head
-	while(move != NULL)//check the first link whether is null
+	if (move->next != NULL)
+	{
+		while(move != NULL)//check the first link whether is null
+		{
+			printf("The ipaddr: %s and the port is %d\n",move->ipaddr,move->port);
+			move = move->next;//next link
+		}
+	}
+	else
 	{
 		printf("The ipaddr: %s and the port is %d\n",move->ipaddr,move->port);
-		move = move->next;//next link
 	}
 }
 
