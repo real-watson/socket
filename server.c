@@ -16,14 +16,13 @@
 #define BUFF_TEXT_1K 1024
 #define PATH "video.mp4"
 #define PATH_MESG "."
+#define VERSION "1.01"
 //jpg 
 //#define PATH "girl.jpg"
 unsigned int img_index = 0;
 unsigned int id_index = 200;
 
-
 pthread_mutex_t mutex;//pthread lock 
-
 
 typedef struct ip
 {
@@ -41,44 +40,31 @@ typedef struct dlink
 	struct dlink *rnext;
 }DLINKS;
 
-
-
 /*print all links*/
 static void print_links(LINKS *head,DLINKS *dhead)
 {
 	LINKS *move = NULL;
 	DLINKS *dmove = NULL;
-
 	move = head;
 	dmove = dhead;
-
 	//point to head
 	if (move->next != NULL)
-	{
 		while(move != NULL)//check the first link whether is null
 		{
 			printf("The ipaddr: %s and the port is %d\n",move->ipaddr,move->port);
 			move = move->next;//next link
 		}
-	}
 	else
-	{
 		printf("The ipaddr: %s and the port is %d\n",move->ipaddr,move->port);
-	}
 
 	if (dmove->rnext != NULL)
-	{
 		while(dmove != NULL)
 		{
 			printf("The ipaddr: %s, and the port is %d, and the id index is %d\n",dmove->ipaddr,dmove->port,dmove->index);
 			dmove = dmove->rnext;//right list
 		}
-	}
 	else
-	{
 		printf("The ipaddr: %s, and the port is %d, and the id index is %d\n",dmove->ipaddr,dmove->port,dmove->index);
-		
-	}
 }
 
 /*add links for restoring ipaddr and port*/
@@ -87,43 +73,38 @@ static void create_links(LINKS **head, LINKS *input)
 	LINKS *move = *head;
 	if (*head == NULL)//first link(head)
 	{
-		printf("hellow\n");
 		*head = input;
 		input->next = NULL;
 	}
 	else//after first link
 	{
 		if(move->next != NULL)
-		{
 			move = move->next;
-		}
 		move->next = input;
 		input->next = NULL;//the end of link
 	}
 }
 
-static void double_create_links(DLINKS **head, DLINKS *input)
+static void double_create_links(DLINKS **dhead, DLINKS *dinput)
 {
-	DLINKS *move = *head;
+	DLINKS *dmove = *dhead;
 
-	/*lnext--head--rnext*/
-	if (*head == NULL)//first link(head)
+	/*lnext--dhead--rnext*/
+	if (*dhead == NULL)//first link(head)
 	{
-		*head = input;
+		*dhead = dinput;
 		//left and right should be null
-		input->lnext = NULL;
-		input->rnext = NULL;
+		dinput->lnext = NULL;
+		dinput->rnext = NULL;
 	}
 	else//after first link
 	{
-		if(move->rnext != NULL)
-		{
-			move = move->rnext;
-		}
+		if(dmove->rnext != NULL)
+			dmove = dmove->rnext;
 		//move--input-rnext(NULL)
-		move->rnext = input;
-		input->lnext = move;
-		input->rnext = NULL;//the end of link
+		dmove->rnext = dinput;
+		dinput->lnext = dmove;
+		dinput->rnext = NULL;//the end of link
 	}
 }
 
@@ -154,7 +135,7 @@ static int init_random_n()
 {
     unsigned int n = 0;
     while(n = random()*100)
-	break;
+		break;
     return n;
 }
 
@@ -181,8 +162,9 @@ static int msg_queen_ipaddr(unsigned char *ipaddr, char *path, unsigned int id)
     typedef struct message
     {
         long msg_type;
-	char msg_text[BUFF_TEXT_1K];
+		char msg_text[BUFF_TEXT_1K];
     }MESSAGE;
+
     int qid;
     key_t key;
     MESSAGE msg;
@@ -341,16 +323,16 @@ static int init_socket_server()
     sockfd = socket(AF_INET, SOCK_STREAM, 0); 
     if(sockfd < 0)
     {
-	perror("socket error");
-	return -1;
+		perror("socket error");
+		return -1;
     }
     //check the type of socket
     len = sizeof(sock_type);
     err_log = getsockopt(sockfd,SOL_SOCKET,SO_TYPE,&sock_type,&len);
     if (err_log == -1)
     {
-	close(sockfd);
-	return -1;
+		close(sockfd);
+		return -1;
     }
     printf("The sock type is %d\n",sock_type);
     /*Init the addr struct.*/
@@ -364,22 +346,27 @@ static int init_socket_server()
     if(err_log != 0)
     {
     	perror("bind");
-	close(sockfd);//it needs closing
-	return -1;
+		close(sockfd);//it needs closing
+		return -1;
     }
     err_log = listen(sockfd, 10);
     if( err_log != 0)
     {
-	perror("listen");
-	close(sockfd);
-	return -1;
+		perror("listen");
+		close(sockfd);
+		return -1;
     }
     printf("Waiting client...\n");
     return sockfd;
 }
+static void init_version()
+{
+	printf("The version is %s\n",VERSION);
+}
 //===============================================================
 int main(int argc, char **argv)
 {
+	init_version();
     int sockfd = 0;
     int connfd = 0;
     pthread_t thread_id;
