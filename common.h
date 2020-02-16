@@ -5,7 +5,7 @@
 #define BUFF_TEXT_1K 1024
 #define PATH "video.mp4"
 #define PATH_MESG "."
-#define VERSION "1.01"
+#define VERSION "2.01"
 
 pthread_mutex_t mutex;//pthread lock 
 

@@ -19,17 +19,19 @@
 int main(int argc, char **argv)
 {
 	init_version();
+
     int sockfd = 0;
     int connfd = 0;
-    pthread_t thread_id;
+
     /*Init the pthread.*/
+    pthread_t thread_id;
     pthread_mutex_init(&mutex, NULL); 
 
     sockfd = init_socket_server();
+
 	//init the links
 	LINKS *head = NULL;
 	LINKS *input = NULL;
-
 	DLINKS *dhead = NULL;
 	DLINKS *dinput = NULL;
 
@@ -49,14 +51,13 @@ int main(int argc, char **argv)
 
 		strcpy(input->ipaddr,inet_ntoa(client_addr.sin_addr));
 		input->port = client_addr.sin_port;
-	
+
 		strcpy(dinput->ipaddr,inet_ntoa(client_addr.sin_addr));
 		dinput->port = client_addr.sin_port;
 		dinput->index = id_index;
 
 		create_links(&head,input);
 		double_create_links(&dhead,dinput);
-
 		print_links(head,dhead);//print all links
 
 		if(connfd < 0)
