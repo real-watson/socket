@@ -11,7 +11,8 @@
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <sys/types.h>
-#include "function.h"
+
+extern int init_socket_server();
 
 #define BUFF_SIZE_12K 1024*12
 #define BUFF_TEXT_1K 1024
