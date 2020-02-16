@@ -32,12 +32,26 @@ typedef struct ip
 	struct ip *next;
 }LINKS;
 
+typedef struct dlink
+{
+	unsigned int index;	
+	unsigned int port;
+	char ipaddr[32];
+	struct dlink *lnext;
+	struct dlink *rnext;
+}DLINKS;
+
+
 
 /*print all links*/
-static void print_links(LINKS *head)
+static void print_links(LINKS *head,DLINKS *dhead)
 {
 	LINKS *move = NULL;
+	DLINKS *dmove = NULL;
+
 	move = head;
+	dmove = dhead;
+
 	//point to head
 	if (move->next != NULL)
 	{
@@ -50,6 +64,20 @@ static void print_links(LINKS *head)
 	else
 	{
 		printf("The ipaddr: %s and the port is %d\n",move->ipaddr,move->port);
+	}
+
+	if (dmove->rnext != NULL)
+	{
+		while(dmove != NULL)
+		{
+			printf("The ipaddr: %s, and the port is %d, and the id index is %d\n",dmove->ipaddr,dmove->port,dmove->index);
+			dmove = dmove->rnext;//right list
+		}
+	}
+	else
+	{
+		printf("The ipaddr: %s, and the port is %d, and the id index is %d\n",dmove->ipaddr,dmove->port,dmove->index);
+		
 	}
 }
 
@@ -73,6 +101,32 @@ static void create_links(LINKS **head, LINKS *input)
 		input->next = NULL;//the end of link
 	}
 }
+
+static void double_create_links(DLINKS **head, DLINKS *input)
+{
+	DLINKS *move = *head;
+
+	/*lnext--head--rnext*/
+	if (*head == NULL)//first link(head)
+	{
+		*head = input;
+		//left and right should be null
+		input->lnext = NULL;
+		input->rnext = NULL;
+	}
+	else//after first link
+	{
+		if(move->rnext != NULL)
+		{
+			move = move->rnext;
+		}
+		//move--input-rnext(NULL)
+		move->rnext = input;
+		input->lnext = move;
+		input->rnext = NULL;//the end of link
+	}
+}
+
 
 //init the dynamic memeory
 static void get_memeory(char **ptr,int m)
@@ -337,6 +391,9 @@ int main(int argc, char **argv)
 	LINKS *head = NULL;
 	LINKS *input = NULL;
 
+	DLINKS *dhead = NULL;
+	DLINKS *dinput = NULL;
+
     while(1)
     {
 		char cli_ip[INET_ADDRSTRLEN] = "";
@@ -349,10 +406,20 @@ int main(int argc, char **argv)
 	
 		//init link
 		input = (LINKS *)malloc(sizeof(LINKS));
+		dinput = (DLINKS *)malloc(sizeof(DLINKS));
+
 		strcpy(input->ipaddr,inet_ntoa(client_addr.sin_addr));
 		input->port = client_addr.sin_port;
+	
+		strcpy(dinput->ipaddr,inet_ntoa(client_addr.sin_addr));
+		dinput->port = client_addr.sin_port;
+		dinput->index = id_index;
+
 		create_links(&head,input);
-		print_links(head);
+		double_create_links(&dhead,dinput);
+
+		print_links(head,dhead);//print all links
+
 		if(connfd < 0)
 		{
 			perror("accept this time");
