@@ -49,7 +49,7 @@ static int send_recv_mesg(int sockfd)
     FILE *img = NULL;
     unsigned int ret = 0;
     char img_buff[SIZE] = {0};
-    char jpg_name[] = "helloworld";
+    char jpg_name[] = "../logfile/helloworld";
     img = fopen(jpg_name,"rb+");
     if (NULL == img)
     {

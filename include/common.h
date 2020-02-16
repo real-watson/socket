@@ -8,11 +8,9 @@
 #define PATH_MESG "."
 #define VERSION "2.01"
 #define IP_ADDR_SIZE 64
+#define LOG_STORE(string) (log_store_to_file(string,__FILE__,__func__,__LINE__))
 pthread_mutex_t mutex;//pthread lock 
 
-/*two c files include these variables*/
-static unsigned int img_index = 0;
-static unsigned int id_index = 200;
 
 //single link
 typedef struct link
@@ -41,6 +39,7 @@ extern int recv_video_from_client(unsigned int connfd);
 extern int init_lock(FILE *file, int type);
 extern void *client_process(void *arg);
 extern int recv_image_from_client(int connfd);
+extern int log_store_to_file(char *string, char *filepath, const char *function, const int line);
 
 #define __INIT_H__
 #endif

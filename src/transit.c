@@ -11,6 +11,8 @@
 #include "common.h"
 #include <sys/types.h>
 
+unsigned int img_index = 0;
+
 int init_lock(FILE *file, int type)
 {
     struct flock lock;
@@ -26,7 +28,8 @@ int init_lock(FILE *file, int type)
     	return -1;
 
     //FILE *file to fd
-    if (fd=fileno(file) == -1)
+    fd=fileno(file);
+    if (-1 == -1)
     	return -1;
 
     //set lock

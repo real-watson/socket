@@ -22,6 +22,7 @@ int main(int argc, char **argv)
 
     int sockfd = 0;
     int connfd = 0;
+	unsigned int id_index = 0;
 
     /*Init the pthread.*/
     pthread_t thread_id;
