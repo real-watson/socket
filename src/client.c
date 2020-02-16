@@ -10,8 +10,6 @@ static int send_recv_mesg(int sockfd);
 int main(int argc, char *argv[])
 {
     int sockfd = 0; 
-    int connfd = 0;
-    int err_log = 0;
     int ret;
     struct sockaddr_in my_addr; 
     unsigned short port = 23456; 
