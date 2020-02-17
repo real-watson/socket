@@ -10,24 +10,37 @@ void print_links(LINKS *head,DLINKS *dhead)
 	DLINKS *dmove = NULL;
 	move = head;
 	dmove = dhead;
-	//point to head
-	if (move->next != NULL)
-		while(move != NULL)//check the first link whether is null
-		{
-			printf("The ipaddr: %s and the port is %d\n",move->ipaddr,move->port);
-			move = move->next;//next link
-		}
-	else
-		printf("The ipaddr: %s and the port is %d\n",move->ipaddr,move->port);
 
-	if (dmove->rnext != NULL)
-		while(dmove != NULL)
+	//point to head
+	while(move != NULL)//check the first link whether is null
+	{
+		printf("ONE_LINKSThe ipaddr: %s and the port is %d\n",move->ipaddr,move->port);
+		if (move->next == NULL)
 		{
-			printf("The ipaddr: %s, and the port is %d, and the id index is %d\n",dmove->ipaddr,dmove->port,dmove->index);
-			dmove = dmove->rnext;//right list
+			break;
 		}
-	else
-		printf("The ipaddr: %s, and the port is %d, and the id index is %d\n",dmove->ipaddr,dmove->port,dmove->index);
+		move = move->next;//next link
+	}
+	//right list for links
+	while(dmove != NULL)
+	{
+		printf("RIGHT_DLINKS The ipaddr: %s, and the port is %d, and the id index is %d\n",dmove->ipaddr,dmove->port,dmove->index);
+		if (dmove->rnext == NULL)
+		{
+			break;
+		}
+		dmove = dmove->rnext;//right list
+	}
+	//left list for links
+	while(dmove != NULL)
+	{
+		printf("LEFT_DLINKS The ipaddr: %s, and the port is %d, and the id index is %d\n",dmove->ipaddr,dmove->port,dmove->index);
+		if (dmove->lnext == NULL)
+		{
+			break;
+		}
+		dmove = dmove->lnext;//left list
+	}
 }
 
 /*add links for restoring ipaddr and port*/
