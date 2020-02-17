@@ -41,7 +41,9 @@ void create_links(LINKS **head, LINKS *input)
 	}
 	else//after first link
 	{
-		if(move->next != NULL)
+		printf("create the next link\n");
+		/*#1 BUG-Used if it returns the only one pointer,while using while, it runs in a list of pointer.*/
+		while(move->next != NULL)
 			move = move->next;
 		move->next = input;
 		input->next = NULL;//the end of link
@@ -62,7 +64,8 @@ void double_create_links(DLINKS **dhead, DLINKS *dinput)
 	}
 	else//after first link
 	{
-		if(dmove->rnext != NULL)
+		/*#1 BUG-Used if it returns the only one pointer,while using while, it runs in a list of pointer.*/
+		while(dmove->rnext != NULL)
 			dmove = dmove->rnext;
 		//move--input-rnext(NULL)
 		dmove->rnext = dinput;
