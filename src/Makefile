@@ -10,4 +10,4 @@ target:
 	$(CC) server.c socket.c transit.c link.c version.c log.c -o server $(INCLUDE) $(LIBS) $(CFLAGS)	
 	$(CC) client.c -o client $(CFLAGS)
 clean:
-	rm pull
+	rm server client 
