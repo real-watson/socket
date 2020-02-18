@@ -32,8 +32,8 @@ typedef struct dlink
 
 extern int init_socket_server();
 extern void print_links(LINKS *head,DLINKS *dhead);
-extern void create_links(LINKS **head, LINKS *input);
-extern void double_create_links(DLINKS **dhead, DLINKS *dinput);
+extern void create_links(LINKS **head, LINKS *input, char *ipaddr, unsigned int port);
+extern void double_create_links(DLINKS **dhead, DLINKS *dinput, char *ipaddr, unsigned int port, unsigned int index);
 extern void init_version();
 extern int recv_video_from_client(unsigned int connfd);
 extern int init_lock(FILE *file, int type);

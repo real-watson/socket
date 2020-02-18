@@ -44,31 +44,25 @@ int main(int argc, char **argv)
 		//set lock for each accept-> connfd_pthread
 		pthread_mutex_lock(&mutex);
 		connfd = accept(sockfd, (struct sockaddr*)&client_addr, &cliaddr_len);
-		id_index++;
-	
-		//init link
-		input = (LINKS *)malloc(sizeof(LINKS));
-		dinput = (DLINKS *)malloc(sizeof(DLINKS));
-
-		strcpy(input->ipaddr,inet_ntoa(client_addr.sin_addr));
-		input->port = client_addr.sin_port;
-
-		strcpy(dinput->ipaddr,inet_ntoa(client_addr.sin_addr));
-		dinput->port = client_addr.sin_port;
-		dinput->index = id_index;
-
-		create_links(&head,input);
-		double_create_links(&dhead,dinput);
-		print_links(head,dhead);//print all links
-
 		if(connfd < 0)
 		{
 			perror("accept this time");
 			continue;
 		}
+		/*
+		*	create links for one direction and the double create links for double directions
+		*	storage about ipaddr,ip port and id index of client
+		*	print all of the links from left to right
+		*	
+		*/
+		create_links(&head,input,inet_ntoa(client_addr.sin_addr),client_addr.sin_port);
+		double_create_links(&dhead,dinput,inet_ntoa(client_addr.sin_addr),client_addr.sin_port,++id_index);
+		print_links(head,dhead);
+
+		
 		//store the id,address,port,mesg  in database(mysql)
 		inet_ntop(AF_INET, &client_addr.sin_addr, cli_ip, INET_ADDRSTRLEN);
-		printf("client ip=%s,port=%d\n", cli_ip,ntohs(client_addr.sin_port));
+
 		//cope with each clients from 
 		if(connfd > 0)
 		{

@@ -44,8 +44,12 @@ void print_links(LINKS *head,DLINKS *dhead)
 }
 
 /*add links for restoring ipaddr and port*/
-void create_links(LINKS **head, LINKS *input)
+void create_links(LINKS **head, LINKS *input, char *ipaddr, unsigned int port)
 {
+	input = (LINKS *)malloc(sizeof(LINKS));
+	memcpy(input->ipaddr,ipaddr,strlen(ipaddr));
+	input->port = port;
+
 	LINKS *move = *head;
 	if (*head == NULL)//first link(head)
 	{
@@ -63,10 +67,16 @@ void create_links(LINKS **head, LINKS *input)
 	}
 }
 
-void double_create_links(DLINKS **dhead, DLINKS *dinput)
+void double_create_links(DLINKS **dhead, DLINKS *dinput, char *ipaddr, unsigned int port, unsigned int index)
 {
+	dinput = (DLINKS *)malloc(sizeof(DLINKS));
+	memcpy(dinput->ipaddr,ipaddr,strlen(ipaddr));
+	dinput->port = port;
+	dinput->index = index;
+
 	DLINKS *dmove = *dhead;
 
+	
 	/*lnext--dhead--rnext*/
 	if (*dhead == NULL)//first link(head)
 	{
