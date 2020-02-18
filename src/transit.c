@@ -41,23 +41,31 @@ int init_lock(FILE *file, int type)
 int recv_video_from_client(unsigned int connfd)
 {
     FILE *video = NULL;
-    unsigned char buff[BUFF_SIZE_12K] = {0};
+    char buff[BUFF_SIZE_12K] = {0};
     unsigned int len = 0;
 
     video = fopen(PATH,"wb");
     if (NULL == video)
 		return -1;
     //lock file avoid others writting file
+	/*error
     if (-1 == init_lock(video,F_WRLCK))
-    	return -1;
+		return -1;
+	*/
     //read video from server
     while((len = recv(connfd,buff,BUFF_SIZE_12K,0)) > 0)
         fwrite(buff,len,sizeof(char),video);		
-    
+	
+	printf("The buff is %s\n",buff);
+	//check password from client
+	if (!(strcmp(buff,"client_server") == 0))
+		return -1;
+
     //unlock file
+	/*
     if (-1 == init_lock(video,F_UNLCK))
     	return -1;
-
+	*/
     if (len < 0)
     	return -1;
 
