@@ -19,3 +19,14 @@ int mystrncpy(const char *src, char *dst, unsigned int n)
 	}
 	return 0;
 }
+
+/*copy way from memset*/
+void mymemnset(char *string, unsigned int n)
+{
+	if (!n)
+		return;
+	while(n--)
+	{
+		*string++ = '\0';
+	}
+}

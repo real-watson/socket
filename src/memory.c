@@ -39,7 +39,8 @@ int init_dynamic_buff(unsigned int m, unsigned char *ipaddr)
 
     //char *buff = "";
     buff = (char*)malloc((sizeof(char)*m));
-    memset(buff,0,m);
+    //memset(buff,0,m);
+    mymemnset(buff,m);
 
     strncpy(buff,ipaddr,m);
     printf("The buff is %s\n",buff); 
