@@ -14,12 +14,11 @@
 #include "common.h"
 
 
-
 //===============================================================
 int main(int argc, char **argv)
 {
 	init_version();
-
+	
     int sockfd = 0;
     int connfd = 0;
 	unsigned int id_index = 0;

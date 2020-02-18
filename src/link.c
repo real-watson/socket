@@ -47,7 +47,8 @@ void print_links(LINKS *head,DLINKS *dhead)
 void create_links(LINKS **head, LINKS *input, char *ipaddr, unsigned int port)
 {
 	input = (LINKS *)malloc(sizeof(LINKS));
-	memcpy(input->ipaddr,ipaddr,strlen(ipaddr));
+	//memcpy(input->ipaddr,ipaddr,strlen(ipaddr));
+	mystrncpy(ipaddr,input->ipaddr,strlen(ipaddr));
 	input->port = port;
 
 	LINKS *move = *head;
@@ -70,7 +71,8 @@ void create_links(LINKS **head, LINKS *input, char *ipaddr, unsigned int port)
 void double_create_links(DLINKS **dhead, DLINKS *dinput, char *ipaddr, unsigned int port, unsigned int index)
 {
 	dinput = (DLINKS *)malloc(sizeof(DLINKS));
-	memcpy(dinput->ipaddr,ipaddr,strlen(ipaddr));
+	//memcpy(dinput->ipaddr,ipaddr,strlen(ipaddr));
+	mystrncpy(ipaddr,dinput->ipaddr,strlen(ipaddr));
 	dinput->port = port;
 	dinput->index = index;
 

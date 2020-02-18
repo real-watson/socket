@@ -40,6 +40,7 @@ extern int init_lock(FILE *file, int type);
 extern void *client_process(void *arg);
 extern int recv_image_from_client(int connfd);
 extern int log_store_to_file(char *string, char *filepath, const char *function, const int line);
+extern void mystrncpy(const char *src, char *dst, unsigned int n);
 
 #define __INIT_H__
 #endif
