@@ -28,7 +28,6 @@ int main(int argc, char **argv)
     pthread_mutex_init(&mutex, NULL); 
 
     sockfd = init_socket_server();
-
 	//init the links
 	LINKS *head = NULL;
 	LINKS *input = NULL;

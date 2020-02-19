@@ -42,6 +42,7 @@ extern int recv_image_from_client(int connfd);
 extern int log_store_to_file(char *string, char *filepath, const char *function, const int line);
 extern void mystrncpy(const char *src, char *dst, unsigned int n);
 extern void mymemnset(const char *src, unsigned int n);
+extern void long_connection_set(int sockfd);
 
 #define __INIT_H__
 #endif
