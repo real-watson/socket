@@ -11,41 +11,41 @@ extern void long_connection_set(int sockfd);
 
 int main(int argc, char *argv[])
 {
-    int sockfd = 0; 
-    int ret;
-    struct sockaddr_in my_addr; 
-    unsigned short port = 23456; 
+	int sockfd = 0; 
+	int ret;
+	struct sockaddr_in my_addr; 
+	unsigned short port = 23456; 
 
-    printf("TCP Server Started at port %d!\n", port);
-    sockfd = socket(AF_INET, SOCK_STREAM, 0); 
+	printf("TCP Server Started at port %d!\n", port);
+	sockfd = socket(AF_INET, SOCK_STREAM, 0); 
 
 	long_connection_set(sockfd);
 
-    if(sockfd < 0)
-    {
-	perror("socket error");
-	exit(-1);
-    }
-    bzero(&my_addr, sizeof(my_addr)); 
-    my_addr.sin_family = AF_INET;
-    my_addr.sin_port = htons(port);
-    my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    printf("Binding server to port %d\n", port);
-    //connect to server
+	if(sockfd < 0)
+	{
+		perror("socket error");
+		exit(-1);
+	}
+	bzero(&my_addr, sizeof(my_addr)); 
+	my_addr.sin_family = AF_INET;
+	my_addr.sin_port = htons(port);
+	my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	printf("Binding server to port %d\n", port);
+	//connect to server
 
-    if (connect(sockfd,(struct sockaddr*)&my_addr,sizeof(struct sockaddr)) == -1)
-    	perror("Connected\n");
+	if (connect(sockfd,(struct sockaddr*)&my_addr,sizeof(struct sockaddr)) == -1)
+		perror("Connected\n");
 
-    //send mesg to server and recv from server
-    ret = send_recv_mesg(sockfd);
-    if (-1 == ret)
-    {
-	printf("Send Recv Error\n");
-	return -1;
-    }
+	//send mesg to server and recv from server
+	ret = send_recv_mesg(sockfd);
+	if (-1 == ret)
+	{
+		printf("Send Recv Error\n");
+		return -1;
+	}
 
-    close(sockfd);
-    return 0;
+	close(sockfd);
+	return 0;
 }
 
 /*send mesg and recv mesg*/
