@@ -7,6 +7,8 @@
 #include <arpa/inet.h>
 #define SIZE 1024*12
 static int send_recv_mesg(int sockfd);
+extern void long_connection_set(int sockfd);
+
 int main(int argc, char *argv[])
 {
     int sockfd = 0; 
@@ -16,6 +18,9 @@ int main(int argc, char *argv[])
 
     printf("TCP Server Started at port %d!\n", port);
     sockfd = socket(AF_INET, SOCK_STREAM, 0); 
+
+	long_connection_set(sockfd);
+
     if(sockfd < 0)
     {
 	perror("socket error");
