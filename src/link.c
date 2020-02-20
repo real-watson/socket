@@ -46,9 +46,12 @@ void print_links(LINKS *head,DLINKS *dhead)
 /*add links for restoring ipaddr and port*/
 void create_links(LINKS **head, LINKS *input, char *ipaddr, unsigned int port)
 {
+	int len = 0;
 	input = (LINKS *)malloc(sizeof(LINKS));
 	//memcpy(input->ipaddr,ipaddr,strlen(ipaddr));
-	mystrncpy(ipaddr,input->ipaddr,strlen(ipaddr));
+	/*self-defined func mystrlen*/
+	len = mystrlen(ipaddr);
+	mystrncpy(ipaddr,input->ipaddr,len);
 	input->port = port;
 
 	LINKS *move = *head;
@@ -70,9 +73,12 @@ void create_links(LINKS **head, LINKS *input, char *ipaddr, unsigned int port)
 
 void double_create_links(DLINKS **dhead, DLINKS *dinput, char *ipaddr, unsigned int port, unsigned int index)
 {
+	int len = 0;
 	dinput = (DLINKS *)malloc(sizeof(DLINKS));
 	//memcpy(dinput->ipaddr,ipaddr,strlen(ipaddr));
-	mystrncpy(ipaddr,dinput->ipaddr,strlen(ipaddr));
+	/*self-defined func mystrlen*/
+	len = mystrlen(ipaddr);
+	mystrncpy(ipaddr,dinput->ipaddr,len);
 	dinput->port = port;
 	dinput->index = index;
 

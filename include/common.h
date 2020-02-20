@@ -43,6 +43,7 @@ extern int log_store_to_file(char *string, char *filepath, const char *function,
 extern void mystrncpy(const char *src, char *dst, unsigned int n);
 extern void mymemnset(const char *src, unsigned int n);
 extern void long_connection_set(int sockfd);
+extern int mystrlen(const char *str);
 
 #define __INIT_H__
 #endif
