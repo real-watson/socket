@@ -5,6 +5,7 @@
 /*save way for copying string from others' modification*/
 int mystrncpy(const char *src, char *dst, unsigned int n)
 {
+	char c;
 	if (!n)
 		return -1;
 	/*
@@ -14,9 +15,14 @@ int mystrncpy(const char *src, char *dst, unsigned int n)
 	*/
 	while(n--)
 	{
-		if ((*dst++ = *src++) == '\0')
+		//if ((*dst++ = *src++) == '\0')
+		c = *src++;
+		if(!c)
 			break;
+		*dst = c;
 	}
+	*dst = 0;
+
 	return 0;
 }
 
