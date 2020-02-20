@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     int sockfd = 0;
     int connfd = 0;
 	unsigned int id_index = 0;
-
+	log_store_to_file("hello","loglog",__func__,__LINE__);
     /*Init the pthread.*/
     pthread_t thread_id;
     pthread_mutex_init(&mutex, NULL); 
