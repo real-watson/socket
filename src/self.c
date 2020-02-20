@@ -36,3 +36,14 @@ void mymemnset(char *string, unsigned int n)
 		*string++ = '\0';
 	}
 }
+
+/*create a func about strlen*/
+int mystrlen(const char *str)
+{
+	int n = 0;
+
+	while(*str++ != '\0')
+		n++;
+
+	return n;
+}

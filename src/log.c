@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "common.h"
 
 int log_store_to_file(char *string, const char *filepath, const char *function, const int line)
 {
