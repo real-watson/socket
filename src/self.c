@@ -3,6 +3,7 @@
 #include <string.h>
 
 /*save way for copying string from others' modification*/
+/*If the src could not avoid null, so it should be check*/
 int mystrncpy(const char *src, char *dst, unsigned int n)
 {
 	char c;
