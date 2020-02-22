@@ -7,7 +7,6 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 #include <fcntl.h>
-#include <mysql.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <sys/types.h>
