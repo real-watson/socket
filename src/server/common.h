@@ -6,7 +6,7 @@
 #define BUFF_TEXT_1K 1024
 #define PATH "video.mp4"
 #define PATH_MESG "."
-#define VERSION "4.00"
+#define VERSION "v4.01"
 #define IP_ADDR_SIZE 64
 #define LOG_STORE(string) (log_store_to_file(string,__FILE__,__func__,__LINE__))
 pthread_mutex_t mutex;//pthread lock 
