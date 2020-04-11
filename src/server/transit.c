@@ -84,14 +84,12 @@ int recv_image_from_client(int connfd)
 
     sprintf(index_jpg,"img/no_%d.jpg",img_index);
     img = fopen(index_jpg,"wb");
-    if (NULL == img)
-    {
+    if (NULL == img){
     	printf("Error in fopen\n");
     	return -1;
     }
     //read from client and write to img
-    while((len = recv(connfd,buff,sizeof(buff),0)) > 0)
-    {
+    while((len = recv(connfd,buff,sizeof(buff),0)) > 0){
     	printf("The len is %d\n",len);
         fwrite(buff,len,sizeof(char),img);		
     }
@@ -103,11 +101,14 @@ int recv_image_from_client(int connfd)
 void *client_process(void *arg)
 {
     int connfd = *(int *)arg; 
+	int res = 0;
     /*Unlock the pthread.*/
     pthread_mutex_unlock(&mutex);
     printf("receive image from client: ip:port:mesg:flag:id\n");
     //recv_image_from_client(connfd);
-    recv_video_from_client(connfd);
+    res = recv_video_from_client(connfd);
+	if (!res)
+		return NULL;
 
     close(connfd); 
     return NULL;

@@ -12,31 +12,25 @@ void print_links(LINKS *head,DLINKS *dhead)
 	dmove = dhead;
 
 	//point to head
-	while(move != NULL)//check the first link whether is null
-	{
+	while(move != NULL){
 		printf("ONE_LINKSThe ipaddr: %s and the port is %d\n",move->ipaddr,move->port);
-		if (move->next == NULL)
-		{
+		if (move->next == NULL){
 			break;
 		}
 		move = move->next;//next link
 	}
 	//right list for links
-	while(dmove != NULL)
-	{
+	while(dmove != NULL){
 		printf("RIGHT_DLINKS The ipaddr: %s, and the port is %d, and the id index is %d\n",dmove->ipaddr,dmove->port,dmove->index);
-		if (dmove->rnext == NULL)
-		{
+		if (dmove->rnext == NULL){
 			break;
 		}
 		dmove = dmove->rnext;//right list
 	}
 	//left list for links
-	while(dmove != NULL)
-	{
+	while(dmove != NULL){
 		printf("LEFT_DLINKS The ipaddr: %s, and the port is %d, and the id index is %d\n",dmove->ipaddr,dmove->port,dmove->index);
-		if (dmove->lnext == NULL)
-		{
+		if (dmove->lnext == NULL){
 			break;
 		}
 		dmove = dmove->lnext;//left list
@@ -55,17 +49,16 @@ void create_links(LINKS **head, LINKS *input, char *ipaddr, unsigned int port)
 	input->port = port;
 
 	LINKS *move = *head;
-	if (*head == NULL)//first link(head)
-	{
+	if (*head == NULL){
 		*head = input;
 		input->next = NULL;
 	}
-	else//after first link
-	{
+	else{
 		printf("create the next link\n");
 		/*#1 BUG-Used if it returns the only one pointer,while using while, it runs in a list of pointer.*/
-		while(move->next != NULL)
+		while(move->next != NULL){
 			move = move->next;
+		}
 		move->next = input;
 		input->next = NULL;//the end of link
 	}
@@ -86,18 +79,17 @@ void double_create_links(DLINKS **dhead, DLINKS *dinput, char *ipaddr, unsigned 
 
 	
 	/*lnext--dhead--rnext*/
-	if (*dhead == NULL)//first link(head)
-	{
+	if (*dhead == NULL){
 		*dhead = dinput;
 		//left and right should be null
 		dinput->lnext = NULL;
 		dinput->rnext = NULL;
 	}
-	else//after first link
-	{
+	else{
 		/*#1 BUG-Used if it returns the only one pointer,while using while, it runs in a list of pointer.*/
-		while(dmove->rnext != NULL)
+		while(dmove->rnext != NULL){
 			dmove = dmove->rnext;
+		}
 		//move--input-rnext(NULL)
 		dmove->rnext = dinput;
 		dinput->lnext = dmove;

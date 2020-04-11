@@ -6,14 +6,17 @@ int log_store_to_file(char *string, const char *filepath, const char *function, 
 {
 	char *ptr = NULL;
 	ptr = (char*)malloc(sizeof(char)*1024);//malloc
-	if (ptr == NULL || string == NULL)
+	if (ptr == NULL || string == NULL){
+		free(ptr);
 		return -1;
-	else
+	}
+	else{
 		sprintf(ptr,"echo string:[%s] filepath:[%s] function:[%s] line:[%d] >> ../logfile/store.log",string,filepath,function,line);
-	
-	if (-1 == system(ptr))
+	}	
+	if (-1 == system(ptr)){
+		free(ptr);
 		return -1;
-
+	}
 	printf("The ptr is %s\n",ptr);
 	free(ptr);//free
 	ptr = NULL;
