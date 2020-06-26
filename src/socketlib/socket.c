@@ -24,12 +24,6 @@ int tcp_socket_init(unsigned short port)
 	my_addr.sin_port = htons(port);
 	my_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-	//connect to server
-	if (connect(sockfd,(struct sockaddr*)&my_addr,sizeof(struct sockaddr)) == -1){
-		perror("Connected\n");
-		return -1;
-	}
-
 	return sockfd;
 }
 

@@ -1,4 +1,5 @@
 #include <stdio.h>
+int tcp_socket_init(unsigned short port);
 
 int main(void)
 {
