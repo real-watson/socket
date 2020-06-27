@@ -27,3 +27,16 @@ int tcp_socket_init(unsigned short port, const char *ip_address)
 	return sockfd;
 }
 
+int tcp_socket_send(int tcp_socket, const char *tcp_data)
+{
+	int res = -1;
+
+	if (-1 == tcp_socket)
+		return -1;
+
+	res = send(tcp_socket,tcp_data,sizeof(tcp_data),0);/*use sizeof to check the count*/
+	if (-1 == res)
+		return -1;
+
+	return res;
+}
