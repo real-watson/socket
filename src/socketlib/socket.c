@@ -27,14 +27,28 @@ int tcp_socket_init(unsigned short port, const char *ip_address)
 	return sockfd;
 }
 
-int tcp_socket_send(int tcp_socket, const char *tcp_data)
+int tcp_socket_send(int tcp_socket, const char *tcp_data, int lens)
 {
 	int res = -1;
 
 	if (-1 == tcp_socket)
 		return -1;
 
-	res = send(tcp_socket,tcp_data,sizeof(tcp_data),0);/*use sizeof to check the count*/
+	res = send(tcp_socket, tcp_data, lens, 0);/*use sizeof to check the count*/
+	if (-1 == res)
+		return -1;
+
+	return res;
+}
+
+int tcp_socket_receive(int tcp_socket, const char *tcp_data, int lens)
+{
+	int res = -1;
+
+	if (-1 == tcp_socket)
+		return -1;
+
+	res = recv(tcp_socket, tcp_data, lens, 0); /*use sizeof to check the count*/
 	if (-1 == res)
 		return -1;
 
